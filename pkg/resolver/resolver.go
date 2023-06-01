@@ -29,6 +29,7 @@ type WorkDeveloper struct {
 var Developers = []Developer{
 	Developer{ID: "1", Name: "John Doe", Email: "john@example.com"},
 	Developer{ID: "2", Name: "Jane Smith", Email: "jane@example.com"},
+	Developer{ID: "3", Name: "Вальтрон Форевер", Email: "valtron.forever@example.com"},
 }
 
 var works = []Work{
@@ -39,6 +40,7 @@ var works = []Work{
 var workDevelopers = []WorkDeveloper{
 	WorkDeveloper{DeveloperID: "1", WorkID: "1"},
 	WorkDeveloper{DeveloperID: "2", WorkID: "2"},
+	WorkDeveloper{DeveloperID: "3", WorkID: "1"},
 }
 
 func ResolveDeveloper(p graphql.ResolveParams) (interface{}, error) {
