@@ -51,6 +51,10 @@ func CreateSchema() (graphql.Schema, error) {
 			"workId": &graphql.Field{
 				Type: graphql.String,
 			},
+			"developer": &graphql.Field{
+				Type:        developerType,
+				Description: "The developer",
+			},
 		},
 	})
 
@@ -77,10 +81,20 @@ func CreateSchema() (graphql.Schema, error) {
 				Description: "Get a work by ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
-						Type: graphql.String,
+						Type:        graphql.NewNonNull(graphql.String),
+						Description: "ID of the work",
+					},
+					"title": &graphql.ArgumentConfig{
+						Type:        graphql.String,
+						Description: "Title of the work",
 					},
 				},
 				Resolve: resolver.ResolveWork,
+			},
+			"works": &graphql.Field{
+				Type:        graphql.NewList(workType),
+				Description: "Get all developers",
+				Resolve:     resolver.Works,
 			},
 			"workDeveloper": &graphql.Field{
 				Type:        workDeveloperType,
@@ -94,6 +108,11 @@ func CreateSchema() (graphql.Schema, error) {
 					},
 				},
 				Resolve: resolver.ResolveWorkDeveloper,
+			},
+			"workDevelopers": &graphql.Field{
+				Type:        graphql.NewList(workDeveloperType),
+				Description: "Get all work developers",
+				Resolve:     resolver.GetWorkDeveloper,
 			},
 		},
 	})

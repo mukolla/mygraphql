@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/graphql-go/graphql"
 	"log"
 	"net/http"
@@ -46,7 +45,7 @@ func main() {
 
 func executeQuery(query string, schema graphql.Schema) *graphql.Result {
 
-	fmt.Println(query)
+	//fmt.Println(query)
 
 	result := graphql.Do(graphql.Params{
 		Schema:        schema,

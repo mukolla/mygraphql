@@ -21,8 +21,9 @@ type Work struct {
 }
 
 type WorkDeveloper struct {
-	DeveloperID string `json:"developerId"`
-	WorkID      string `json:"workId"`
+	DeveloperID string     `json:"developerId"`
+	WorkID      string     `json:"workId"`
+	Developer   *Developer `json:"developer"`
 }
 
 var Developers = []Developer{
@@ -50,8 +51,21 @@ func ResolveDeveloper(p graphql.ResolveParams) (interface{}, error) {
 	return nil, nil
 }
 
+func GetDeveloperByID(id string) *Developer {
+	for _, developer := range Developers {
+		if developer.ID == id {
+			return &developer
+		}
+	}
+	return nil
+}
+
 func ResolveDevelopers(p graphql.ResolveParams) (interface{}, error) {
 	return Developers, nil
+}
+
+func Works(p graphql.ResolveParams) (interface{}, error) {
+	return works, nil
 }
 
 func ResolveWork(p graphql.ResolveParams) (interface{}, error) {
@@ -73,6 +87,18 @@ func ResolveWorkDeveloper(p graphql.ResolveParams) (interface{}, error) {
 		}
 	}
 	return nil, nil
+}
+
+func GetWorkDeveloper(p graphql.ResolveParams) (interface{}, error) {
+	workDevs := workDevelopers
+
+	for i := range workDevs {
+		developerID := workDevs[i].DeveloperID
+		developer := GetDeveloperByID(developerID)
+		workDevs[i].Developer = developer
+	}
+
+	return workDevs, nil
 }
 
 func getDevelopers() []Developer {
@@ -100,3 +126,88 @@ func generateUniqueID() string {
 
 	return uniqueID
 }
+
+//developerID, ok := p.Info.RootValue.(map[string]interface{})["developerId"].(string)
+//if !ok {
+//	return nil, nil
+//}
+//
+//fmt.Println(developerID)
+
+//var workDevelopersWithDeveloperInfo []map[string]interface{}
+//
+////developerID, _ := p.Args["developerId"].(string)
+//
+//fmt.Println(p.Args)
+//
+//developer := GetDeveloperByID("1")
+//fmt.Println(developer)
+//
+//developerInfo := map[string]interface{}{
+//	"developerId": 7,
+//	"workId":      6,
+//	"developer":   "d",
+//}
+//workDevelopersWithDeveloperInfo = append(workDevelopersWithDeveloperInfo, developerInfo)
+//return workDevelopersWithDeveloperInfo, nil
+
+//for _, wd := range workDevelopers {
+//
+//	fmt.Println("DeveloperID: ", wd.DeveloperID)
+//	fmt.Println(GetDeveloperByID(wd.DeveloperID))
+//
+//	dev := GetDeveloperByID(wd.DeveloperID)
+//	if dev == nil {
+//		continue
+//	}
+//	developerInfo := map[string]interface{}{
+//		"developerId": wd.DeveloperID,
+//		"workId":      wd.WorkID,
+//		"developer":   dev,
+//	}
+//	workDevelopersWithDeveloperInfo = append(workDevelopersWithDeveloperInfo, developerInfo)
+//}
+//
+//return workDevelopersWithDeveloperInfo, nil
+
+/*Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
+	fmt.Println(p.Info.)
+
+	//project, ok := p.Info.ParentType.(*graphql.Object)
+	//if !ok {
+	//	return nil, nil
+	//}
+
+	//
+	//fmt.Println(project.Fields())
+	//developerID := p.Source.(map[string]interface{})["developerId"].(string)
+
+	//project, ok := p.Info.ParentType.(*graphql.Object)
+	//if !ok {
+	//	return nil, nil
+	//}
+	//
+	//fields := project.Fields()
+	//developerIDField, ok := fields["developerId"]
+	//if !ok {
+	//	return nil, nil
+	//}
+	//
+	//developerIDType, ok := developerIDField.Type.(*graphql.NonNull).OfType.(*graphql.Scalar)
+	//if !ok {
+	//	return nil, nil
+	//}
+	//
+	//developerID := developerIDType.Name()
+
+	// Використовуйте значення developerID за необхідність
+	//fmt.Println("developerId:", developerID)
+
+	//developerIDField := context.Background()
+
+	//fmt.Println(developerIDField)
+
+	developer := resolver.GetDeveloperByID("2")
+	return developer, nil
+},*/
